@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timesheet App</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <h1>Timesheet Application</h1>
+
+    <!-- Worker Section -->
+    <section id="worker">
+      <h2>Worker Timesheet Submission</h2>
+      <form id="timesheetForm">
+        <label for="workerName">Name:</label>
+        <input type="text" id="workerName" placeholder="Your name" required>
+        
+        <label for="hoursWorked">Hours Worked:</label>
+        <input type="number" id="hoursWorked" placeholder="Hours worked" required>
+
+        <button type="submit">Submit Timesheet</button>
+      </form>
+    </section>
+
+    <hr>
+
+    <!-- Manager Section -->
+    <section id="manager">
+      <h2>Manager Timesheet Approval</h2>
+      <div id="timesheetList">
+        <p>No timesheets submitted yet.</p>
+      </div>
+    </section>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
