@@ -1,10 +1,9 @@
-/* General styles */
+/* General Styling */
 body {
   font-family: Arial, sans-serif;
-  background-color: #f9f9f9;
-  color: #333;
-  margin: 0;
-  padding: 20px;
+  margin: 20px;
+  padding: 0;
+  background-color: #f7f7f7;
 }
 
 #app {
@@ -13,57 +12,119 @@ body {
   background: white;
   padding: 20px;
   border-radius: 8px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-h1, h2 {
-  color: #4CAF50;
+h1 {
   text-align: center;
+  color: #333;
 }
 
 form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  margin-bottom: 20px;
 }
 
-input, button {
-  padding: 10px;
-  font-size: 16px;
+label {
+  display: block;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+input[type="text"],
+input[type="number"] {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 button {
-  background-color: #4CAF50;
-  color: white;
+  padding: 10px 15px;
   border: none;
+  background-color: #007bff;
+  color: white;
   border-radius: 5px;
   cursor: pointer;
 }
 
 button:hover {
-  background-color: #45a049;
+  background-color: #0056b3;
 }
 
-#timesheetList {
-  padding: 10px;
+/* Flexbox Styling for Horizontal Days */
+#dayInputs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: space-between;
+}
+
+.day-input {
+  flex: 1 1 calc(33.333% - 10px); /* Adjust for 3 items per row */
+  min-width: 200px;
+}
+
+.day-input label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.day-input input {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Styling for the Timesheet Display Section */
+#timesheetDays {
+  margin-top: 20px;
+}
+
+.day-section {
+  margin-bottom: 20px;
 }
 
 .timesheet {
-  border: 1px solid #ddd;
   padding: 10px;
-  margin-bottom: 10px;
+  border: 1px solid #ddd;
   border-radius: 5px;
-  background-color: #f0f0f0;
+  background-color: #f9f9f9;
+  margin-bottom: 10px;
 }
 
-button.approve, button.reject {
-  margin-right: 10px;
+.timesheet p {
+  margin: 5px 0;
 }
 
-button.approve {
-  background-color: #4CAF50;
+.approve,
+.reject {
+  margin-right: 5px;
+  background-color: #28a745;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  color: white;
+  cursor: pointer;
 }
 
-button.reject {
-  background-color: #f44336;
+.reject {
+  background-color: #dc3545;
+}
+
+.approve:hover {
+  background-color: #218838;
+}
+
+.reject:hover {
+  background-color: #c82333;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .day-input {
+    flex: 1 1 100%;
+  }
 }

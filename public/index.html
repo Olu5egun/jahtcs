@@ -1,43 +1,223 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weekly Timesheet</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      padding: 0;
+    }
+    form {
+      margin-bottom: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      max-width: 500px;
+    }
+    .day-hours {
+      margin-bottom: 10px;
+    }
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .timesheet-day {
+      margin-top: 20px;
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 8px;
+    }
+    .timesheet-entry {
+      margin-bottom: 15px;
+      padding: 10px;
+      background-color: #f9f9f9;
+      border-radius: 6px;
+    }
+    .actions button {
+      margin-right: 5px;
+    }
+  </style>
+</head>
+<body>
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
-    <title>React App</title>
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+<h1>Weekly Timesheet Submission</h1>
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+<form id="timesheetForm">
+  <label for="workerName">Worker Name:</label>
+  <input id="workerName" type="text" placeholder="Enter worker name" required />
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
-  </body>
+  <label for="location">Location:</label>
+  <input id="location" type="text" placeholder="Enter location" required />
+
+  <div class="day-hours">
+    <label for="mondayHours">Monday:</label>
+    <input id="mondayHours" type="number" min="0" placeholder="Enter hours for Monday" />
+  </div>
+
+  <div class="day-hours">
+    <label for="tuesdayHours">Tuesday:</label>
+    <input id="tuesdayHours" type="number" min="0" placeholder="Enter hours for Tuesday" />
+  </div>
+
+  <div class="day-hours">
+    <label for="wednesdayHours">Wednesday:</label>
+    <input id="wednesdayHours" type="number" min="0" placeholder="Enter hours for Wednesday" />
+  </div>
+
+  <div class="day-hours">
+    <label for="thursdayHours">Thursday:</label>
+    <input id="thursdayHours" type="number" min="0" placeholder="Enter hours for Thursday" />
+  </div>
+
+  <div class="day-hours">
+    <label for="fridayHours">Friday:</label>
+    <input id="fridayHours" type="number" min="0" placeholder="Enter hours for Friday" />
+  </div>
+
+  <div class="day-hours">
+    <label for="saturdayHours">Saturday:</label>
+    <input id="saturdayHours" type="number" min="0" placeholder="Enter hours for Saturday" />
+  </div>
+
+  <div class="day-hours">
+    <label for="sundayHours">Sunday:</label>
+    <input id="sundayHours" type="number" min="0" placeholder="Enter hours for Sunday" />
+  </div>
+
+  <button type="submit">Submit Timesheet</button>
+</form>
+
+<div id="timesheetSummary"></div>
+
+<script>
+  const timesheetForm = document.getElementById("timesheetForm");
+  const timesheetSummary = document.getElementById("timesheetSummary");
+
+  // Object to store timesheets by day
+  const timesheets = {
+    Monday: [],
+    Tuesday: [],
+    Wednesday: [],
+    Thursday: [],
+    Friday: [],
+    Saturday: [],
+    Sunday: []
+  };
+
+  // Helper function to render the timesheet summary
+  function renderTimesheets() {
+    timesheetSummary.innerHTML = ""; // Clear the summary
+
+    Object.keys(timesheets).forEach(day => {
+      const dayContainer = document.createElement("div");
+      dayContainer.classList.add("timesheet-day");
+      dayContainer.innerHTML = `<h2>${day}</h2>`;
+
+      if (timesheets[day].length === 0) {
+        dayContainer.innerHTML += "<p>No timesheets submitted for this day.</p>";
+      } else {
+        timesheets[day].forEach((entry, index) => {
+          const entryDiv = document.createElement("div");
+          entryDiv.classList.add("timesheet-entry");
+          entryDiv.innerHTML = `
+            <p><strong>Worker Name:</strong> ${entry.workerName}</p>
+            <p><strong>Location:</strong> ${entry.location}</p>
+            <p><strong>Hours Worked:</strong> ${entry.hours}</p>
+            <div class="actions">
+              <button class="approve" data-day="${day}" data-index="${index}">Approve</button>
+              <button class="reject" data-day="${day}" data-index="${index}">Reject</button>
+            </div>
+          `;
+          dayContainer.appendChild(entryDiv);
+        });
+      }
+      timesheetSummary.appendChild(dayContainer);
+    });
+
+    // Add event listeners for approve and reject buttons
+    document.querySelectorAll(".approve").forEach(button => {
+      button.addEventListener("click", approveTimesheet);
+    });
+    document.querySelectorAll(".reject").forEach(button => {
+      button.addEventListener("click", rejectTimesheet);
+    });
+  }
+
+  // Form submission handler
+  timesheetForm.addEventListener("submit", event => {
+    event.preventDefault();
+
+    const workerName = document.getElementById("workerName").value.trim();
+    const location = document.getElementById("location").value.trim();
+    const hoursPerDay = {
+      Monday: parseFloat(document.getElementById("mondayHours").value) || 0,
+      Tuesday: parseFloat(document.getElementById("tuesdayHours").value) || 0,
+      Wednesday: parseFloat(document.getElementById("wednesdayHours").value) || 0,
+      Thursday: parseFloat(document.getElementById("thursdayHours").value) || 0,
+      Friday: parseFloat(document.getElementById("fridayHours").value) || 0,
+      Saturday: parseFloat(document.getElementById("saturdayHours").value) || 0,
+      Sunday: parseFloat(document.getElementById("sundayHours").value) || 0
+    };
+
+    if (!workerName || !location) {
+      alert("Please fill out all required fields!");
+      return;
+    }
+
+    Object.keys(hoursPerDay).forEach(day => {
+      const hours = hoursPerDay[day];
+      if (hours > 0) {
+        timesheets[day].push({ workerName, location, hours });
+      }
+    });
+
+    timesheetForm.reset(); // Clear the form
+    renderTimesheets(); // Update the summary
+  });
+
+  // Approve timesheet handler
+  function approveTimesheet(event) {
+    const day = event.target.dataset.day;
+    const index = event.target.dataset.index;
+    alert(`Approved timesheet for ${timesheets[day][index].workerName}.`);
+    timesheets[day].splice(index, 1); // Remove entry
+    renderTimesheets(); // Refresh summary
+  }
+
+  // Reject timesheet handler
+  function rejectTimesheet(event) {
+    const day = event.target.dataset.day;
+    const index = event.target.dataset.index;
+    alert(`Rejected timesheet for ${timesheets[day][index].workerName}.`);
+    timesheets[day].splice(index, 1); // Remove entry
+    renderTimesheets(); // Refresh summary
+  }
+
+  // Initial render
+  renderTimesheets();
+</script>
+
+</body>
 </html>
